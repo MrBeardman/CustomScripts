@@ -1,0 +1,117 @@
+<!-- PŘEKLADY SYSTÉMOVÝCH TEXTŮ --> 
+<script>
+
+ function updateMinicartContent() {
+  if (document.contains(document.querySelector(".cart-widget-product"))) {
+    console.log(
+      document.contains(document.querySelector(".cart-widget-product"))
+    );
+    if (dataLayer[0].shoptet.cart.length === 0) {
+      setTimeout(function () {
+        document.querySelector(".cart-widget-product").innerHTML =
+          "Your shopping cart is empty";
+      }, 200); // Adjust the delay as needed
+    } else if (
+      dataLayer[0].shoptet.cartInfo.leftToFreeShipping.priceLeft <= 0
+    ) {
+      setTimeout(function () {
+        document.querySelector(".cart-free-shipping div ").innerHTML =
+          "<strong>You have free shipping!</strong>";
+      }, 200); // Adjust the delay as needed
+    } else {
+      setTimeout(function () {
+        console.log(
+          document.querySelector(".cart-free-shipping strong").textContent
+        );
+        const extraShippingPrice = document.querySelector(
+          ".cart-free-shipping strong"
+        ).textContent;
+        document.querySelector(
+          ".cart-free-shipping div"
+        ).innerHTML = `Add products for<strong>${extraShippingPrice}</strong> to your order that you are entitled to <strong>FREE</strong> delivery.`;
+      }, 200); // Adjust the delay as needed
+    }
+  }
+}
+function updateCartPage1Content() {
+  if (dataLayer[0].shoptet.pageType === "cart") {
+    if (dataLayer[0].shoptet.cartInfo.leftToFreeShipping.priceLeft <= 0) {
+      setTimeout(function () {
+        let extraShipping = (document.querySelector(
+          ".extra.delivery span"
+        ).innerHTML = `<strong>You have free shipping!</strong>`);
+      }, 200); // Adjust the delay as needed
+    } else {
+      // get price value from string
+      const extraShippingPrice = document.querySelector(
+        ".extra.delivery strong"
+      ).textContent;
+      //compose new string
+      priceRange = document.querySelector(
+        ".extra.delivery .price-range"
+      ).innerHTML;
+      let extraShipping = (document.querySelector(
+        ".extra.delivery span"
+      ).innerHTML = `Add products for<strong>${extraShippingPrice}</strong>to your order that you are entitled to <strong>FREE</strong> delivery. <div class="price-range">${priceRange}</div>`);
+    }
+  }
+}
+
+// Počká až se načte stránka
+document.addEventListener("DOMContentLoaded", (event) => {
+  const inputElement = document
+    .querySelector(".query-input")
+    .setAttribute("placeholder", "What are you looking for");
+  const emailInput = (document.querySelector(
+    'input[name="email"]'
+  ).placeholder = "E-mail address");
+  const passwordInput = (document.querySelector(
+    'input[name="password"]'
+  ).placeholder = "Password");
+  //KOŠÍK stránka 1
+  updateCartPage1Content();
+  //KOŠÍK stránka 2
+  if (dataLayer[0].shoptet.pageType === "billingAndShipping") {
+    const shippingElement = (document.querySelector(
+      ".recapitulation-shipping-billing-label"
+    ).textContent = "Delivery");
+    const paymentElement = (document.querySelector(
+      ".recapitulation-single.recapitulation-shipping-billing.last .recapitulation-shipping-billing-label"
+    ).textContent = "Payment");
+    translatePcs();
+    const feeElement = (document.querySelector(
+      '.recapitulation-shipping-billing.last [data-testid="recapItemPrice"]'
+    ).textContent = "Free");
+    //KOŠÍK stránka 3
+  } else if (dataLayer[0].shoptet.pageType === "customerDetails") {
+    const shippingElement = (document.querySelector(
+      ".recapitulation-single:first-child span"
+    ).textContent = "Delivery");
+    const paymentElement = (document.querySelector(
+      ".recapitulation-single:last-child span"
+    ).textContent = "Payment");
+    translatePcs();
+    const feeElement = (document.querySelector(
+      '.recapitulation-single:last-child [data-testid="recapItemPrice"]'
+    ).textContent = "Free");
+  }
+  //Minikošík překlad
+  document.addEventListener("ShoptetDOMCartContentLoaded", function () {
+    updateMinicartContent();
+    updateCartPage1Content();
+  });
+  setTimeout(function () {
+    updateMinicartContent();
+  }, 200); // Adjust the delay as needed
+});
+
+//this code is called twice, so its put into a function.
+function translatePcs() {
+  const pcsElements = document.querySelectorAll(".unit-value");
+  for (let i = 0; i < pcsElements.length; i++) {
+    pcsElements[i].textContent = "pcs";
+  }
+}
+
+</script>
+<!-- PŘEKLADY SYSTÉMOVÝCH TEXTŮ KONEC -->
